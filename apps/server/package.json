@@ -15,7 +15,9 @@
   "license": "ISC",
   "packageManager": "pnpm@10.20.0",
   "dependencies": {
+    "@google/genai": "^1.28.0",
     "@hono/node-server": "^1.19.6",
+    "dotenv": "^17.2.3",
     "hono": "^4.10.4"
   },
   "devDependencies": {
