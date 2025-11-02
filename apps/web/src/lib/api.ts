@@ -1,18 +1,26 @@
-export type GeneratePayload = { prompt: string };
-export type GenerateResponse = { dataUrl?: string; error?: string };
-
-export async function generateImage(prompt: string): Promise<GenerateResponse> {
-  const res = await fetch('/api/generate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt } as GeneratePayload),
-  });
-
-  // Try to parse JSON even on non-200 to show server error text
-  const data = (await res.json().catch(() => ({}))) as GenerateResponse;
-
-  if (!res.ok) {
-    return { error: data?.error || `Request failed (${res.status})` };
+export type GeneratePayload = {
+    prompt: string;
+    style?: string;
+    palette?: string;
+    format?: 'square' | 'landscape' | 'portrait' | 'widescreen';
+    n?: number;
+  };
+  export type GenerateResponse = { dataUrls?: string[]; dataUrl?: string; error?: string };
+  
+  export async function generateImage(payload: GeneratePayload): Promise<GenerateResponse> {
+    console.log('[api] Sending payload:', { ...payload, prompt: payload.prompt?.slice(0, 50) + '...' });
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = (await res.json().catch(() => ({}))) as GenerateResponse;
+  
+    if (!res.ok) return { error: data?.error || `Request failed (${res.status})` };
+  
+    console.log('[api] Received response:', { count: data.dataUrls?.length || 0, hasError: !!data.error });
+  
+    // Normalize: always prefer array
+    if (!data.dataUrls && data.dataUrl) data.dataUrls = [data.dataUrl];
+    return data;
   }
-  return data;
-}

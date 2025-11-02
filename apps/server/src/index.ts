@@ -4,75 +4,107 @@ import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { GoogleGenAI } from '@google/genai';
 
-// --- env (inline, simple) ---------------------------------------------------
+type GenBody = {
+  prompt?: string;
+  style?: string;
+  palette?: string;
+  format?: 'square' | 'landscape' | 'portrait' | 'widescreen';
+  n?: number;
+};
+
 const PORT = Number(process.env.PORT || 3001);
 const MOCK = process.env.MOCK === '1';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
+const FORMAT_TO_RATIO: Record<string, string> = {
+  square: '1:1',
+  landscape: '4:3',
+  portrait: '3:4',
+  widescreen: '16:9'
+};
+
 if (!MOCK && !GEMINI_API_KEY) {
-  // fail fast with a clear message
   throw new Error('Missing GEMINI_API_KEY. Create apps/server/.env and set it (or set MOCK=1).');
 }
 
-// --- app ---------------------------------------------------------------------
 const app = new Hono();
 
-// CORS: wide-open for dev; tighten to your web origin in prod
 app.use('*', cors());
 
-// health
 app.get('/health', (c) => c.text('ok'));
 
-// hello
 app.get('/', (c) => c.text('Hello from Hono 👋'));
 
-// image generation
 app.post('/api/generate', async (c) => {
-  const body = await c.req.json<{ prompt?: string }>().catch(() => ({ prompt: undefined }));
-  const prompt = (body?.prompt || '').trim();
+  const body = await c.req.json<GenBody>().catch(() => ({} as GenBody));
+  const basePrompt = (body?.prompt || '').trim();
+  if (!basePrompt) return c.json({ error: 'Missing prompt' }, 400);
 
-  if (!prompt) return c.json({ error: 'Missing prompt' }, 400);
+  const style = (body?.style || '').trim();
+  const palette = (body?.palette || '').trim();
+  const format = (body?.format || 'square');
+  const n = Math.max(1, Math.min(4, Number(body?.n ?? 1)));
+  console.log(`[server] Received request: n=${body?.n}, parsed n=${n}`);
 
-  // Mock mode: return a placeholder SVG so reviewers can run without a key
+  const finalPrompt = [
+    basePrompt,
+    style ? `Style: ${style}.` : '',
+    palette && palette !== 'default' ? `Color palette: ${palette}.` : '',
+  ].filter(Boolean).join(' ');
+
+  // ---- MOCK path: guaranteed array of data URLs ----
   if (MOCK) {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024">
-      <rect width="100%" height="100%" fill="#eee"/>
-      <text x="50%" y="50%" font-size="28" text-anchor="middle" dominant-baseline="middle">
-        MOCK IMAGE: ${prompt.slice(0, 80)}
-      </text></svg>`;
-    const base64 = Buffer.from(svg, 'utf8').toString('base64');
-    return c.json({ dataUrl: `data:image/svg+xml;base64,${base64}` });
+    const items = Array.from({ length: n }).map((_, i) => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024">
+        <rect width="100%" height="100%" fill="#eee"/>
+        <text x="50%" y="50%" font-size="24" text-anchor="middle" dominant-baseline="middle">
+          MOCK ${i + 1}/${n}: ${finalPrompt.slice(0, 80)} • ${FORMAT_TO_RATIO[format] || '1:1'}
+        </text></svg>`;
+      const b64 = Buffer.from(svg, 'utf8').toString('base64');
+      return `data:image/svg+xml;base64,${b64}`;
+    });
+    return c.json({ dataUrls: items });
   }
 
+  // ---- Real call ----
   try {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-    // “Nano Banana” model id:
-    //   gemini-2.5-flash-image  (image generation)
-    const res = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: prompt,
-      // Optional:
-      // config: { response_modalities: ['Image'], image_config: { aspect_ratio: '1:1' } }
-    });
+    const results: string[] = [];
+    console.log(`[server] Starting generation loop: n=${n}`);
+    for (let i = 0; i < n; i++) {
+      console.log(`[server] Generating image ${i + 1}/${n}`);
+      const res = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: finalPrompt,
+        config: {
+          responseModalities: ['Image'],
+          imageConfig: { aspectRatio: FORMAT_TO_RATIO[format] ?? '1:1' },
+        },
+      });
 
-    // extract first image part
-    const parts = res?.candidates?.[0]?.content?.parts ?? [];
-    const imagePart = parts.find((p: any) => p?.inlineData?.data);
+      const parts = res?.candidates?.[0]?.content?.parts ?? [];
+      const imagePart = parts.find((p: any) => p?.inlineData?.data);
+      if (!imagePart) {
+        console.log(`[server] Warning: No image part found for iteration ${i + 1}`);
+        continue;
+      }
 
-    if (!imagePart) return c.json({ error: 'Model returned no image' }, 502);
+      const base64 = imagePart.inlineData.data as string;
+      const mime = imagePart.inlineData.mimeType || 'image/png';
+      results.push(`data:${mime};base64,${base64}`);
+      console.log(`[server] Successfully added image ${i + 1}, total results: ${results.length}`);
+    }
 
-    const base64 = imagePart.inlineData.data as string;
-    const mime = imagePart.inlineData.mimeType || 'image/png';
-
-    return c.json({ dataUrl: `data:${mime};base64,${base64}` });
+    console.log(`[server] Generation complete: ${results.length} images generated (requested ${n})`);
+    if (!results.length) return c.json({ error: 'Model returned no image' }, 502);
+    return c.json({ dataUrls: results });
   } catch (err) {
-    console.error(err);
+    console.error('[generate] error:', err);
     return c.json({ error: 'Generation failed' }, 500);
   }
 });
 
-// start
 serve({ fetch: app.fetch, port: PORT }, ({ port }) => {
   console.log(`✅ Server listening on http://localhost:${port}`);
 });

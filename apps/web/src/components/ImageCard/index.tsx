@@ -1,13 +1,27 @@
-type Props = { img: string | null };
-
-export default function ImageCard({ img }: Props) {
-  if (!img) return null;
-  return (
-    <div>
-      <img src={img} alt="Generated" style={{ maxWidth: '100%', borderRadius: 8, display: 'block' }} />
-      <a href={img} download="generated.png" style={{ display: 'inline-block', marginTop: 8 }}>
-        Download
-      </a>
-    </div>
-  );
+import { Well } from "@adobe/react-spectrum";
+type Props = {
+    img: string | null;
+    caption?: string;
+    filename?: string;
+  };
+  
+export default function ImageCard({ img, caption, filename = "generated.png" }: Props) {
+    if (!img) return null;
+    return (
+        <Well>
+            <img
+                src={img}
+                alt={caption || "Generated"}
+                style={{ width: "100%", borderRadius: 8 }}
+            />
+            {caption && (
+                <figcaption style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
+                {caption}
+                </figcaption>
+            )}
+            <a href={img} download={filename}>
+                Download
+            </a>
+        </Well>
+    );
 }
