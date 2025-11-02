@@ -1,0 +1,6 @@
+
+> server@1.0.0 dev /Users/jonathanortiz/Personal/CodingChallenges/draftbox-ai/apps/server
+> ts-node src/index.ts
+
+✅ Hono server running at http://localhost:3001
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed.[39m
