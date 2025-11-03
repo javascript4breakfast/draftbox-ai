@@ -1,5 +1,19 @@
-node_modules
-dist
+# dependencies
+node_modules/
+pnpm-lock.yaml
+
+# build output
+dist/
+.next/
+out/
+
+# env files (ignore)
+*.env
+*.env.*
 .env
-*.env.local
-apps/server/.env
+apps/*/.env
+apps/*/*.env
+
+# BUT keep env example templates tracked
+!*.env.example
+!apps/*/*.env.example
