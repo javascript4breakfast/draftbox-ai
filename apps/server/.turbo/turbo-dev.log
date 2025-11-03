@@ -1,5 +1,5 @@
 
-> server@1.0.0 dev /Users/jonathanortiz/Personal/CodingChallenges/draftbox-ai/apps/server
+> server@1.0.0 dev /Users/jonathanortiz/Personal/draftbox-ai/apps/server
 > tsx src/index.ts
 
 ✅ Server listening on http://localhost:3001
