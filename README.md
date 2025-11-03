@@ -260,6 +260,12 @@ pnpm typecheck
 pnpm lint
 ```
 
+## ⏱️ Development Time
+
+- **Research**: 2 hours
+- **Coding**: 10 hours
+- **Total**: 12 hours
+
 ## 📝 License
 
 ISC
