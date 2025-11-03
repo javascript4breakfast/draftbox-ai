@@ -21,8 +21,10 @@ The Draftbox AI server is a RESTful API that handles image generation requests f
 
 ```
 src/
-├── index.ts    # Main server file with routes and logic
-└── env.ts      # Environment variable validation (optional)
+├── index.ts       # Main server entry point
+├── env.ts         # Environment variable validation (optional)
+└── routes/        # API route handlers
+    └── generate.ts # Image generation endpoint implementation
 ```
 
 ## 🔑 API Endpoints
@@ -270,26 +272,41 @@ When `n > 1`, the server:
 
 ### Main Server File (`index.ts`)
 
+The main server file sets up the Hono application and registers routes:
+
 ```typescript
 // Configuration
 const PORT = Number(process.env.PORT || 3001);
-const MOCK = process.env.MOCK === '1';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-
-// Format mapping
-const FORMAT_TO_RATIO: Record<string, string> = { ... };
 
 // Hono app setup
 const app = new Hono();
 app.use('*', cors());
 
-// Routes
+// Register routes
 app.get('/health', ...);
 app.get('/', ...);
-app.post('/api/generate', ...);
+app.post('/api/generate', generateHandler); // Route handler from routes/generate.ts
 
 // Server start
 serve({ fetch: app.fetch, port: PORT }, ...);
+```
+
+### Route Handler (`routes/generate.ts`)
+
+The image generation logic is separated into its own route handler file:
+
+```typescript
+// Format mapping
+const FORMAT_TO_RATIO: Record<string, string> = { ... };
+
+// Main generation handler
+export const generateHandler = async (c: Context) => {
+  // Request parsing
+  // Prompt construction
+  // Generation loop
+  // Image extraction
+  // Error handling
+};
 ```
 
 ### Key Functions
@@ -304,9 +321,9 @@ serve({ fetch: app.fetch, port: PORT }, ...);
 
 ### Adding New Features
 
-1. **New Routes**: Add to Hono app with appropriate method
-2. **New Parameters**: Extend `GenBody` type and validation
-3. **New Formats**: Add to `FORMAT_TO_RATIO` mapping
+1. **New Routes**: Create route handler in `routes/` directory and register in `index.ts`
+2. **New Parameters**: Extend request type and validation in route handler
+3. **New Formats**: Add to `FORMAT_TO_RATIO` mapping in route handler
 4. **Error Handling**: Always return JSON with error message
 
 ### Type Safety
