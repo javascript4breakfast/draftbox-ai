@@ -130,8 +130,10 @@ draftbox-ai/
 ├── apps/
 │   ├── server/              # Backend API (Hono + Node.js)
 │   │   └── src/
-│   │       ├── index.ts     # Main server with API routes
-│   │       └── env.ts       # Environment validation
+│   │       ├── index.ts     # Main server entry point
+│   │       ├── env.ts       # Environment validation
+│   │       └── routes/      # API route handlers
+│   │           └── generate.ts  # Image generation endpoint
 │   └── web/                 # Frontend (React + Vite)
 │       └── src/
 │           ├── components/  # React components
