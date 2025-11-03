@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/index.ts",
+    "dev": "tsx src/index.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/node": "^24.9.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "~5.9.3"
   }
 }
