@@ -1,4 +1,6 @@
 import { Well } from "@adobe/react-spectrum";
+import styles from './image-card.module.css';
+
 type Props = {
     img: string | null;
     caption?: string;
@@ -8,18 +10,18 @@ type Props = {
 export default function ImageCard({ img, caption, filename = "generated.png" }: Props) {
     if (!img) return null;
     return (
-        <Well>
+        <Well className={styles.card}>
             <img
                 src={img}
                 alt={caption || "Generated"}
-                style={{ width: "100%", borderRadius: 8 }}
+                className={styles.image}
             />
             {caption && (
-                <figcaption style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
+                <figcaption className={styles.caption}>
                 {caption}
                 </figcaption>
             )}
-            <a href={img} download={filename}>
+            <a href={img} download={filename} className={styles.downloadLink}>
                 Download
             </a>
         </Well>

@@ -1,0 +1,14 @@
+.errorBox {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px;
+    min-height: 33vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorIcon {
+    font-size: 24px;
+}

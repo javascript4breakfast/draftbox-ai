@@ -1,0 +1,11 @@
+.navHeaderWrapper {
+    margin: 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--spectrum-global-color-gray-100);
+    border-bottom: 1px solid var(--spectrum-global-color-gray-200);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+}

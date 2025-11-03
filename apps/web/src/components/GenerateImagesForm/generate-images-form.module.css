@@ -1,0 +1,26 @@
+.formContainer {
+    padding: 12px;
+}
+
+.formControls {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.refiningItem {
+    padding: 12px;
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancelButton {
+    margin-left: 12px;
+}

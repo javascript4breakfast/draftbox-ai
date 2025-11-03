@@ -3,4 +3,106 @@
 > ts-node src/index.ts
 
 ✅ Server listening on http://localhost:3001
+[server] Received request: n=3, parsed n=3
+[server] Starting generation loop: n=3
+[server] Generating image 1/3
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/3
+[server] Successfully added image 2, total results: 2
+[server] Generating image 3/3
+[server] Successfully added image 3, total results: 3
+[server] Generation complete: 3 images generated (requested 3)
+[server] Received request: n=2, parsed n=2
+[server] Starting generation loop: n=2
+[server] Generating image 1/2
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/2
+[server] Successfully added image 2, total results: 2
+[server] Generation complete: 2 images generated (requested 2)
+[server] Received request: n=4, parsed n=4
+[server] Starting generation loop: n=4
+[server] Generating image 1/4
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/4
+[server] Successfully added image 2, total results: 2
+[server] Generating image 3/4
+[server] Successfully added image 3, total results: 3
+[server] Generating image 4/4
+[server] Successfully added image 4, total results: 4
+[server] Generation complete: 4 images generated (requested 4)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Warning: No image part found for iteration 1
+[server] Generation complete: 0 images generated (requested 1)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Warning: No image part found for iteration 1
+[server] Generation complete: 0 images generated (requested 1)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Warning: No image part found for iteration 1
+[server] Generation complete: 0 images generated (requested 1)
+[server] Received request: n=2, parsed n=2
+[server] Starting generation loop: n=2
+[server] Generating image 1/2
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/2
+[server] Successfully added image 2, total results: 2
+[server] Generation complete: 2 images generated (requested 2)
+[server] Received request: n=4, parsed n=4
+[server] Starting generation loop: n=4
+[server] Generating image 1/4
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/4
+[server] Successfully added image 2, total results: 2
+[server] Generating image 3/4
+[server] Successfully added image 3, total results: 3
+[server] Generating image 4/4
+[server] Successfully added image 4, total results: 4
+[server] Generation complete: 4 images generated (requested 4)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Successfully added image 1, total results: 1
+[server] Generation complete: 1 images generated (requested 1)
+[server] Received request: n=4, parsed n=4
+[server] Starting generation loop: n=4
+[server] Generating image 1/4
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/4
+[server] Successfully added image 2, total results: 2
+[server] Generating image 3/4
+[server] Successfully added image 3, total results: 3
+[server] Generating image 4/4
+[server] Successfully added image 4, total results: 4
+[server] Generation complete: 4 images generated (requested 4)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Warning: No image part found for iteration 1
+[server] Generation complete: 0 images generated (requested 1)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Successfully added image 1, total results: 1
+[server] Generation complete: 1 images generated (requested 1)
+[server] Received request: n=4, parsed n=4
+[server] Starting generation loop: n=4
+[server] Generating image 1/4
+[server] Successfully added image 1, total results: 1
+[server] Generating image 2/4
+[server] Successfully added image 2, total results: 2
+[server] Generating image 3/4
+[server] Successfully added image 3, total results: 3
+[server] Generating image 4/4
+[server] Successfully added image 4, total results: 4
+[server] Generation complete: 4 images generated (requested 4)
+[server] Received request: n=1, parsed n=1
+[server] Starting generation loop: n=1
+[server] Generating image 1/1
+[server] Successfully added image 1, total results: 1
+[server] Generation complete: 1 images generated (requested 1)
 [41m[30m ELIFECYCLE [39m[49m [31mCommand failed.[39m

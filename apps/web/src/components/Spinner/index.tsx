@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Activity } from 'react';
 import styles from './spinner.module.css';
 
 interface SpinnerProps {
@@ -6,10 +6,12 @@ interface SpinnerProps {
   color?: string;
   text?: string;
   fullScreen?: boolean;
+  loading: boolean;
 }
 
 const Spinner: React.FC<SpinnerProps> = ({
-  size = 'medium',
+  loading,
+  size = 'large',
   color = '#3b82f6',
   text,
 }) => {
@@ -22,7 +24,7 @@ const Spinner: React.FC<SpinnerProps> = ({
   const spinnerSize = sizeMap[size];
 
   return (
-    <div>
+    <Activity mode={loading ? 'visible' : 'hidden'}>
       <div className={styles.spinnerWrapper}>
         <div
           className={styles.spinner}
@@ -35,7 +37,7 @@ const Spinner: React.FC<SpinnerProps> = ({
         />
         {text && <p className={styles.spinnerText}>{text}</p>}
       </div>
-    </div>
+    </Activity>
   );
 };
 

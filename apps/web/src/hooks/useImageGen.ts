@@ -86,5 +86,35 @@ export function useImageGen() {
     });
   };
 
-  return { loading, error, history, submit, regenerate, refine };
+  /** Update an existing item's images with new variations, keeping the same item ID. */
+  const updateItemImages = async (itemId: string, n: number = 4) => {
+    const item = history.find(i => i.id === itemId);
+    if (!item) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const payload: GeneratePayload = {
+        prompt: item.prompt,
+        style: item.style,
+        palette: item.palette,
+        format: item.format,
+        n: Math.min(4, Math.max(1, n)),
+      };
+
+      const { dataUrls, error } = await generateImage(payload);
+      if (error) throw new Error(error);
+
+      const images = dataUrls ?? [];
+      setHistory((h) =>
+        h.map((i) => (i.id === itemId ? { ...i, images } : i))
+      );
+    } catch (e: any) {
+      setError(e?.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, history, submit, regenerate, refine, updateItemImages };
 }

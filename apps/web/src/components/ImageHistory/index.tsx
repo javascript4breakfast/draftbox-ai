@@ -1,13 +1,13 @@
 import { Button } from "@adobe/react-spectrum";
 import { type GenItem } from "../../hooks/useImageGen";
-import { type GeneratePayload } from "../../lib/api";
 import ImageCard from "../ImageCard";
+import styles from './image-history.module.css';
 
 export default function ImageHistory({
     history,
     loading,
-    submit,
     regenerate,
+    updateItemImages,
     setPrompt, 
     setStyle, 
     setPalette, 
@@ -17,8 +17,8 @@ export default function ImageHistory({
   }: { 
     history: GenItem[];
     loading: boolean;
-    submit: (payload: GeneratePayload) => Promise<void>;
     regenerate: (item: GenItem, n?: number) => Promise<void>;
+    updateItemImages: (itemId: string, n?: number) => Promise<void>;
     setPrompt: (prompt: string) => void;
     setStyle: (style: string) => void;
     setPalette: (palette: string) => void;
@@ -27,32 +27,32 @@ export default function ImageHistory({
     setRefiningItem: (item: GenItem | null) => void;
   }) {
     return (
-      <div style={{ marginTop:24, display:'grid', gap:16 }}>
+      <div className={styles.historyContainer}>
         {history.map(item => (
-          <div key={item.id} style={{ border:'1px solid #eee', borderRadius:12, padding:12 }}>
-            <div style={{ display:'flex', gap:8, alignItems:'baseline', flexWrap:'wrap' }}>
-              <strong style={{ fontSize:14 }}>Prompt:</strong>
-              <span style={{ color:'#333' }}>{item.prompt}</span>
-              <span style={{ color:'#777', marginLeft:'auto', fontSize:12 }}>
+          <div key={item.id} className={styles.historyItem}>
+            <div className={styles.header}>
+              <span className={styles.prompt}>Prompt:</span>
+              <span className={styles.promptText}>{item.prompt}</span>
+              <span className={styles.timestamp}>
                 {new Date(item.createdAt).toLocaleTimeString()}
               </span>
             </div>
   
-            <div style={{ color:'#666', fontSize:12, marginTop:6 }}>
+            <div className={styles.metadata}>
               {item.style && <span>Style: <b>{item.style}</b> • </span>}
               {item.palette && item.palette !== 'default' && <span>Palette: <b>{item.palette}</b> • </span>}
               {item.format && <span>Format: <b>{item.format}</b></span>}
             </div>
   
             {/* Variations grid using ImageCard */}
-            <div style={{ borderRadius: 12, display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:12, marginTop:12 }}>
+            <div className={styles.imagesGrid}>
               {item.images.map((src, i) => (
                 <ImageCard key={i} img={src} caption={`Variation ${i + 1}`} filename={`image-${item.id}-${i + 1}.png`} />
               ))}
             </div>
   
             {/* Actions: Regenerate / Refine / Make 4 variations */}
-            <div style={{ display:'flex', gap:8, marginTop:12, flexWrap:'wrap' }}>
+            <div className={styles.actions}>
               <Button
                 variant="accent"
                 onPress={() => regenerate(item, item.images.length || 1)}
@@ -88,13 +88,7 @@ export default function ImageHistory({
               <Button
                 variant="secondary"
                 style="outline"
-                onPress={() => submit({
-                  prompt: item.prompt,
-                  style: item.style,
-                  palette: item.palette,
-                  format: item.format,
-                  n: 4
-                })}
+                onPress={() => updateItemImages(item.id, 4)}
                 isDisabled={loading}
               >
                 Make 4 variations
