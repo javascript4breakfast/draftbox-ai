@@ -97,7 +97,7 @@ pnpm lint       # Run linter
 ### Generating Your First Image
 
 1. **Open the app** at `http://localhost:5173`
-2. **Enter a prompt** in the text area (e.g., "a serene mountain landscape at sunset")
+2. **Enter a prompt** in the text area (e.g., "a modern website layout for a taco truck")
 3. **Customize options** (optional):
    - **Style**: Choose from photorealistic, anime, watercolor, pixel art, etc.
    - **Color Palette**: Select pastel, neon, monochrome, earth tones, etc.
