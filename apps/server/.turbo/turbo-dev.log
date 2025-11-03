@@ -1,11 +1,6 @@
 
 > server@1.0.0 dev /Users/jonathanortiz/Personal/CodingChallenges/draftbox-ai/apps/server
-> ts-node src/index.ts
+> tsx src/index.ts
 
 ✅ Server listening on http://localhost:3001
-[server] Received request: n=1, parsed n=1
-[server] Starting generation loop: n=1
-[server] Generating image 1/1
-[server] Successfully added image 1, total results: 1
-[server] Generation complete: 1 images generated (requested 1)
-[41m[30m ELIFECYCLE [39m[49m [31mCommand failed.[39m
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 130.[39m
